@@ -31,7 +31,7 @@ class _LoginState extends State<Login> {
 
     widget._errorMessageSubscription=authBloc.errorMessage.listen((errorMessage) {
       if(errorMessage!=''){
-        AppAlerts.showErrorDialog(context, errorMessage).then((_)=>authBloc.clearErrorMessage());
+        AppAlerts.showErrorDialog(Platform.isIOS, context, errorMessage).then((_)=>authBloc.clearErrorMessage());
       }  //Show our alert
      });
     super.initState();
