@@ -1,4 +1,5 @@
 import 'package:farmers_market/src/screens/landing.dart';
+import 'package:farmers_market/src/screens/vendor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'screens/login.dart';
@@ -7,7 +8,7 @@ import 'screens/signup.dart';
 abstract class Routes {
   static MaterialPageRoute materialRoutes(RouteSettings settings) {
     switch (settings.name) {
-      case "/":
+      case "/landing":
         return MaterialPageRoute(builder: (context) => Landing());
 
       case "/signup":
@@ -16,6 +17,9 @@ abstract class Routes {
       case "/login":
         return MaterialPageRoute(builder: (context) => Login());
 
+      case "/vendor":
+        return MaterialPageRoute(builder: (context) => Vendor());
+
       default:
         return MaterialPageRoute(builder: (context) => Login());
     }
@@ -23,7 +27,7 @@ abstract class Routes {
 
   static CupertinoPageRoute cupertinoRoutes(RouteSettings settings) {
     switch (settings.name) {
-      case "/":
+      case "/landing":
         return CupertinoPageRoute(builder: (context) => Landing());
 
       case "/signup":
@@ -31,6 +35,9 @@ abstract class Routes {
 
       case "/login":
         return CupertinoPageRoute(builder: (context) => Login());
+
+      case "/vendor":
+        return CupertinoPageRoute(builder: (context) => Vendor());
 
       default:
         return CupertinoPageRoute(builder: (context) => Login());

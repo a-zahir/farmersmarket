@@ -3,6 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class TextStyles {
+  static TextStyle get title {
+    return GoogleFonts.poppins(
+      textStyle: TextStyle(
+          color: AppColors.darkblue,
+          fontWeight: FontWeight.bold,
+          fontSize: 40.0),
+    );
+  }
+
+  static TextStyle get subtitle {
+    return GoogleFonts.economica(
+      textStyle: TextStyle(
+          color: AppColors.straw,
+          fontWeight: FontWeight.bold,
+          fontSize: 30.0),
+    );
+  }
+
+  static TextStyle get navTitle {
+    return GoogleFonts.poppins(
+      textStyle: TextStyle(
+          color: AppColors.darkblue,
+          fontWeight: FontWeight.bold,
+          ),
+    );
+  }
+
+  static TextStyle get navTitleMaterial {
+    return GoogleFonts.poppins(
+      textStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          ),
+    );
+  }
+
   static TextStyle get body {
     return GoogleFonts.roboto(
       textStyle: TextStyle(color: AppColors.darkgray, fontSize: 16.0),
@@ -11,7 +47,8 @@ abstract class TextStyles {
 
   static TextStyle get link {
     return GoogleFonts.roboto(
-      textStyle: TextStyle(color: AppColors.straw, fontSize: 16.0,fontWeight: FontWeight.bold),
+      textStyle: TextStyle(
+          color: AppColors.straw, fontSize: 16.0, fontWeight: FontWeight.bold),
     );
   }
 
@@ -27,15 +64,17 @@ abstract class TextStyles {
     );
   }
 
-  static TextStyle get buttonTextLight{
+  static TextStyle get buttonTextLight {
     return GoogleFonts.roboto(
-      textStyle:TextStyle(color: Colors.white,fontSize:17.0,fontWeight:FontWeight.bold)
-    );
+        textStyle: TextStyle(
+            color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold));
   }
 
-  static TextStyle get buttonTextDark{
+  static TextStyle get buttonTextDark {
     return GoogleFonts.roboto(
-      textStyle:TextStyle(color: AppColors.darkgray,fontSize:17.0,fontWeight:FontWeight.bold)
-    );
+        textStyle: TextStyle(
+            color: AppColors.darkgray,
+            fontSize: 17.0,
+            fontWeight: FontWeight.bold));
   }
 }

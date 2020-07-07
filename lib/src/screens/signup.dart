@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:farmers_market/src/blocs/auth_bloc.dart';
 import 'package:farmers_market/src/styles/base.dart';
 import 'package:farmers_market/src/styles/text.dart';
 import 'package:farmers_market/src/widgets/button.dart';
@@ -7,22 +8,41 @@ import 'package:farmers_market/src/widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Signup extends StatelessWidget {
+
+class Signup extends StatefulWidget {
+  @override
+  _SignupState createState() => _SignupState();
+}
+
+class _SignupState extends State<Signup> {
+  @override
+  void initState(){
+    final authBloc=Provider.of<AuthBloc>(context,listen: false);
+    authBloc.user.listen((user) {
+      if(user!=null) Navigator.pushReplacementNamed(context, '/landing');
+    });
+    super.initState();
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    final authBloc = Provider.of<AuthBloc>(context);
     if (Platform.isIOS) {
       return CupertinoPageScaffold(
-        child: pageBody(context),
+        child: pageBody(context, authBloc),
       );
     } else {
       return Scaffold(
-        body: pageBody(context),
+        body: pageBody(context, authBloc),
       );
     }
   }
 
-  Widget pageBody(BuildContext context) {
+  Widget pageBody(BuildContext context, AuthBloc authBloc) {
     return ListView(
       padding: EdgeInsets.all(0.0),
       children: <Widget>[
@@ -43,27 +63,48 @@ class Signup extends StatelessWidget {
             ),
           ),
         ),
-        AppTextField(
-          isIOS: Platform.isIOS,
-          hintText: 'Email',
-          cupertinoIcon: CupertinoIcons.mail_solid,
-          materialIcon: Icons.email,
-          textInputType: TextInputType.emailAddress,
+        StreamBuilder<String>(
+            stream: authBloc.email,
+            builder: (context, snapshot) {
+              return AppTextField(
+                isIOS: Platform.isIOS,
+                hintText: 'Email',
+                cupertinoIcon: CupertinoIcons.mail_solid,
+                materialIcon: Icons.email,
+                textInputType: TextInputType.emailAddress,
+                errorText: snapshot.error,
+                onChanged: authBloc.changeEmail,
+              );
+            }),
+        StreamBuilder<String>(
+            stream: authBloc.password,
+            builder: (context, snapshot) {
+              return AppTextField(
+                isIOS: Platform.isIOS,
+                hintText: 'Password',
+                cupertinoIcon: IconData(0xf4c9,
+                    fontFamily: CupertinoIcons.iconFont,
+                    fontPackage: CupertinoIcons.iconFontPackage),
+                materialIcon: Icons.lock,
+                obscureText: true,
+                errorText: snapshot.error,
+                onChanged: authBloc.changePassword,
+              );
+            }),
+        StreamBuilder<bool>(
+            stream: authBloc.isValid,
+            builder: (context, snapshot) {
+              return AppButton(
+                buttonText: 'Signup',
+                buttonType: (snapshot.data == true)
+                    ? ButtonType.LightBlue
+                    : ButtonType.Disabled,
+                onPressed: authBloc.signupEmail
+              );
+            }),
+        SizedBox(
+          height: 6.0,
         ),
-        AppTextField(
-          isIOS: Platform.isIOS,
-          hintText: 'Password',
-          cupertinoIcon: IconData(0xf4c9,
-              fontFamily: CupertinoIcons.iconFont,
-              fontPackage: CupertinoIcons.iconFontPackage),
-          materialIcon: Icons.lock,
-          obscureText: true,
-        ),
-        AppButton(
-          buttonText: 'Signup',
-          buttonType: ButtonType.LightBlue,
-        ),
-        SizedBox(height: 6.0,),
         Center(
           child: Text(
             'Or',
@@ -85,24 +126,21 @@ class Signup extends StatelessWidget {
             ],
           ),
         ),
-        Padding(  
+        Padding(
           padding: BaseStyles.listPadding,
           child: RichText(
-            textAlign: TextAlign.center,
-            text:TextSpan(  
-              text:'Already Have an Account?',
-              style: TextStyles.body,
-              children: [
-                TextSpan(  
-                  text: 'Login',
-                  style: TextStyles.link,
-                  recognizer: TapGestureRecognizer()
-                    ..onTap=()=>Navigator.pushNamed(context, '/login')
-                )
-              ]
-            )
-            
-            ),
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  text: 'Already Have an Account?',
+                  style: TextStyles.body,
+                  children: [
+                    TextSpan(
+                        text: 'Login',
+                        style: TextStyles.link,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap =
+                              () => Navigator.pushNamed(context, '/login'))
+                  ])),
         )
       ],
     );
