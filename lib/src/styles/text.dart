@@ -45,6 +45,18 @@ abstract class TextStyles {
     );
   }
 
+  static TextStyle get bodyRed {
+    return GoogleFonts.roboto(
+      textStyle: TextStyle(color: AppColors.red, fontSize: 16.0),
+    );
+  }
+
+  static TextStyle get bodyLightBlue {
+    return GoogleFonts.roboto(
+      textStyle: TextStyle(color: AppColors.lightblue, fontSize: 16.0),
+    );
+  }
+
   static TextStyle get picker {
     return GoogleFonts.roboto(
       textStyle: TextStyle(color: AppColors.darkgray, fontSize: 35.0),
