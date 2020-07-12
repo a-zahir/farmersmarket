@@ -14,7 +14,7 @@ class Product {
   Product({
     @required this.approved,
     @required this.availableUnits,
-    this.imageUrl = "",
+    this.imageUrl,
     this.note = "",
     @required this.productId,
     @required this.productName,
@@ -37,15 +37,14 @@ class Product {
     };
   }
 
-  Product.fromFirestore(Map<String,dynamic>firestore)
-    : productName=firestore['productName'],
-      unitType=firestore['unitType'],
-      unitPrice=firestore['unitPrice'],
-      availableUnits=firestore['availableUnits'],
-      approved=firestore['approved'],
-      imageUrl=firestore['imageUrl'],
-      note=firestore['note'],
-      productId=firestore['productId'],
-      vendorId=firestore['vendorId'];
-    
+  Product.fromFirestore(Map<String, dynamic> firestore)
+      : productName = firestore['productName'],
+        unitType = firestore['unitType'],
+        unitPrice = firestore['unitPrice'],
+        availableUnits = firestore['availableUnits'],
+        approved = firestore['approved'],
+        imageUrl = firestore['imageUrl'],
+        note = firestore['note'],
+        productId = firestore['productId'],
+        vendorId = firestore['vendorId'];
 }

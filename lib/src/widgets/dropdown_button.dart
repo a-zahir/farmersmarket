@@ -48,7 +48,7 @@ class AppDropDownButton extends StatelessWidget {
                       showCupertinoModalPopup(
                           context: context,
                           builder: (BuildContext context) {
-                            return _selectIOS(context, items);
+                            return _selectIOS(context, items, value);
                           });
                     },
                   ),
@@ -81,7 +81,7 @@ class AppDropDownButton extends StatelessWidget {
                     style: TextStyles.body,
                     underline: Container(),
                     iconEnabledColor: AppColors.straw,
-                    onChanged: (value)=>onChanged(value),
+                    onChanged: (value) => onChanged(value),
                   ),
                 ),
               ),
@@ -114,7 +114,7 @@ class AppDropDownButton extends StatelessWidget {
         .toList();
   }
 
-  _selectIOS(BuildContext context, List<String> items) {
+  _selectIOS(BuildContext context, List<String> items, String value) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pop();
@@ -123,10 +123,12 @@ class AppDropDownButton extends StatelessWidget {
         color: Colors.white,
         height: 200.0,
         child: CupertinoPicker(
+          scrollController: FixedExtentScrollController(
+              initialItem: items.indexWhere((item) => item == value)),
           itemExtent: 45.0,
           children: buildCupertinoItems(items),
           diameterRatio: 1.0,
-          onSelectedItemChanged: (int index) =>onChanged(items[index]),
+          onSelectedItemChanged: (int index) => onChanged(items[index]),
         ),
       ),
     );

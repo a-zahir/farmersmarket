@@ -10,6 +10,7 @@ import 'package:farmers_market/src/widgets/sliver_scaffold.dart';
 import 'package:farmers_market/src/widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,7 +30,17 @@ class _EditProductState extends State<EditProduct> {
   void initState() {
     var productBloc = Provider.of<ProductBloc>(context, listen: false);
     productBloc.productSaved.listen((saved) {
-      if (saved != null && saved == true) Navigator.of(context).pop();
+      if (saved != null && saved == true && context != null) {
+        Fluttertoast.showToast(
+            msg: "Product Saved",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 2,
+            backgroundColor: AppColors.lightblue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        Navigator.of(context).pop();
+      }
     });
     super.initState();
   }
@@ -43,24 +54,24 @@ class _EditProductState extends State<EditProduct> {
       future: productBloc.fetchProduct(widget.productId),
       builder: (context, snapshot) {
         if (!snapshot.hasData && widget.productId != null) {
-          return Center(
-            child: (Platform.isIOS)
-                ? CupertinoActivityIndicator()
-                : CircularProgressIndicator(),
+          return Scaffold(
+            body: Center(
+              child: (Platform.isIOS)
+                  ? CupertinoActivityIndicator()
+                  : CircularProgressIndicator(),
+            ),
           );
         }
 
-        //TODO: LOAD BLOCK VALUES
         Product existingProduct;
 
         if (widget.productId != null) {
           //Edit Logic
           existingProduct = snapshot.data;
-          loadValues(productBloc, existingProduct,authBloc.userId);
+          loadValues(productBloc, existingProduct, authBloc.userId);
         } else {
           //Add Logic
-          loadValues(productBloc, null,authBloc.userId);
-
+          loadValues(productBloc, null, authBloc.userId);
         }
 
         return (Platform.isIOS)
@@ -80,10 +91,11 @@ class _EditProductState extends State<EditProduct> {
   Widget pageBody(bool isIOS, ProductBloc productBloc, BuildContext context,
       Product existingProduct) {
     var items = Provider.of<List<String>>(context);
+    var pageLabel = (existingProduct != null) ? 'Edit Product' : 'Add Product';
     return ListView(
       children: <Widget>[
         Text(
-          'Add Product',
+          pageLabel,
           style: TextStyles.subtitle,
           textAlign: TextAlign.center,
         ),
@@ -152,7 +164,31 @@ class _EditProductState extends State<EditProduct> {
                 onChanged: productBloc.changeAvailableUnits,
               );
             }),
-        AppButton(buttonType: ButtonType.Straw, buttonText: 'Add Image'),
+        StreamBuilder<String>(
+            stream: productBloc.imageUrl,
+            builder: (context, snapshot) {
+              print('image>>>>' + snapshot.data);
+              if (!snapshot.hasData || snapshot.data == "")
+                return AppButton(
+                  buttonType: ButtonType.Straw,
+                  buttonText: 'Add Image',
+                  onPressed: productBloc.pickImage,
+                );
+              print('image<<<<>>>>>>' + snapshot.data);
+              return Column(
+                children: <Widget>[
+                  Padding(
+                    padding: BaseStyles.listPadding,
+                    child: Image.network(snapshot.data),
+                  ),
+                  AppButton(
+                    buttonType: ButtonType.Straw,
+                    buttonText: 'Change Image',
+                    onPressed: productBloc.pickImage,
+                  )
+                ],
+              );
+            }),
         StreamBuilder<bool>(
             stream: productBloc.isValid,
             builder: (context, snapshot) {
@@ -168,22 +204,23 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
-  loadValues(ProductBloc productBloc, Product product, String vendorId){
+  loadValues(ProductBloc productBloc, Product product, String vendorId) {
     productBloc.changeProduct(product);
     productBloc.changeVendorId(vendorId);
-    if (product!=null){
+    if (product != null) {
       //edit
       productBloc.changeUnitType(product.unitType);
       productBloc.changeProductName(product.productName);
       productBloc.changeUnitPrice(product.unitPrice.toString());
       productBloc.changeAvailableUnits(product.availableUnits.toString());
-    }else{
+      productBloc.changeImageUrl(product.imageUrl ?? '');
+    } else {
       //add
       productBloc.changeUnitType(null);
       productBloc.changeProductName(null);
       productBloc.changeUnitPrice(null);
       productBloc.changeAvailableUnits(null);
+      productBloc.changeImageUrl('');
     }
-
   }
 }
