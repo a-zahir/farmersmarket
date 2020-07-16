@@ -35,7 +35,7 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   rxdart: ^0.24.1
   provider: ^4.1.3
-  fluttertoast: ^4.0.1s
+  fluttertoast: ^4.0.1
   uuid: ^2.2.0
   intl: ^0.16.1
   image_picker: ^0.6.7+3
