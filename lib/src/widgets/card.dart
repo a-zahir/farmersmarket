@@ -11,14 +11,16 @@ class AppCard extends StatelessWidget {
   final int availableUnits;
   final double price;
   final String note;
+  final String imageUrl;
 
-  final formatCurrency=NumberFormat.simpleCurrency();
+  final formatCurrency = NumberFormat.simpleCurrency();
 
   AppCard({
     @required this.productName,
     @required this.unitType,
     @required this.availableUnits,
     @required this.price,
+    this.imageUrl,
     this.note = "",
   });
 
@@ -42,14 +44,23 @@ class AppCard extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.only(right: 10.0, bottom: 10.0, top: 10.0),
-                child:
-                    Image.asset('assets/images/vegetables.png', height: 100.0),
+                child: (imageUrl != null && imageUrl != "")
+                    ? ClipRRect(
+                        child: Image.network(
+                          imageUrl,
+                          height: 120,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      )
+                    : Image.asset('assets/images/vegetables.png',
+                        height: 100.0),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(productName, style: TextStyles.subtitle),
-                  Text('${formatCurrency.format(price)}/$unitType', style: TextStyles.body),
+                  Text('${formatCurrency.format(price)}/$unitType',
+                      style: TextStyles.body),
                   (availableUnits > 0)
                       ? Text('In Stock', style: TextStyles.bodyLightBlue)
                       : Text('Currenlty Unavailable',

@@ -30,7 +30,7 @@ class Products extends StatelessWidget {
           return Column(
             children: <Widget>[
               Expanded(
-                              child: ListView.builder(
+                child: ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
                       var product = snapshot.data[index];
@@ -40,21 +40,23 @@ class Products extends StatelessWidget {
                             price: product.unitPrice,
                             productName: product.productName,
                             unitType: product.unitType,
+                            imageUrl: product.imageUrl,
                           ),
                           onTap: () => Navigator.of(context)
                               .pushNamed('/editproduct/${product.productId}'));
                     }),
               ),
               GestureDetector(
-                              child: Container(
-                  height:50.0,
-                  width:double.infinity,
-                  color:AppColors.straw,
-                  child:(Platform.isIOS)
-                  ? Icon(CupertinoIcons.add, color:Colors.white,size:35.0)
-                  : Icon(Icons.add, color:Colors.white,size:35.0),
+                child: Container(
+                  height: 50.0,
+                  width: double.infinity,
+                  color: AppColors.straw,
+                  child: (Platform.isIOS)
+                      ? Icon(CupertinoIcons.add,
+                          color: Colors.white, size: 35.0)
+                      : Icon(Icons.add, color: Colors.white, size: 35.0),
                 ),
-                onTap:()=>Navigator.of(context).pushNamed('/editproduct'),
+                onTap: () => Navigator.of(context).pushNamed('/editproduct'),
               )
             ],
           );
